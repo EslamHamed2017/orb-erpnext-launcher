@@ -10,6 +10,8 @@ A lightweight, Odoo-style module launcher for **ERPNext / Frappe Desk**. It keep
 - Preserves the original ERPNext, Framework, sidebar, roles, and permissions.
 - Responsive card layout; the native ERPNext and Framework tiles are restyled as matching cards.
 - Press and hold a module card, then drag it to rearrange. The order is saved per user (browser + user defaults).
+- Rebrands ERPNext as **Basetaa ERP** (display only): app tile, sidebar logo, tab title, favicon and
+  System Settings → App Name (login page / emails). The `erpnext` app itself is not renamed.
 - Each card opens the module's own workspace (e.g. Projects → `/desk/projects`), not the generic Home page.
 - No changes to Frappe or ERPNext core files.
 
