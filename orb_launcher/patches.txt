@@ -10,3 +10,4 @@ orb_launcher.patches.v0_6.enforce_website_branding
 orb_launcher.patches.v0_6.finalize_website_branding
 orb_launcher.patches.v0_6.cleanup_legacy_login_branding
 orb_launcher.patches.v0_6.restore_orb_login_branding
+orb_launcher.patches.v0_6.restore_orb_login_logo
