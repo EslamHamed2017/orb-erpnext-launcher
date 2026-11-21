@@ -66,11 +66,21 @@ def apply_site_branding():
 	routes and data remain untouched.
 	"""
 	changed = False
-	for doctype in ("System Settings", "Website Settings"):
-		current = frappe.db.get_single_value(doctype, "app_name") or ""
-		if current.strip() != BRAND_NAME:
-			frappe.db.set_single_value(doctype, "app_name", BRAND_NAME)
-			changed = True
+	display_values = {
+		"System Settings": {"app_name": BRAND_NAME},
+		"Website Settings": {
+			"app_name": BRAND_NAME,
+			"title_prefix": BRAND_NAME,
+			"brand_html": f"<strong>{BRAND_NAME}</strong>",
+			"app_logo": BRAND_LOGO,
+			"favicon": BRAND_LOGO,
+		},
+	}
+	for doctype, values in display_values.items():
+		for field, value in values.items():
+			if frappe.db.get_single_value(doctype, field) != value:
+				frappe.db.set_single_value(doctype, field, value)
+				changed = True
 	if changed:
 		from frappe.website.utils import clear_website_cache
 
