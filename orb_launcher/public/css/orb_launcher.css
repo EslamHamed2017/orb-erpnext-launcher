@@ -32,21 +32,37 @@
 @media (prefers-reduced-motion:reduce) { #orb-module-launcher,.orb-module-card{animation:none;opacity:1;transform:none}.orb-module-card{transition:none} }
 
 
-/* ORB compact desktop layout */
-.desktop-container:has(#orb-module-launcher) {
-  align-items: flex-start;
-}
-.desktop-container:has(#orb-module-launcher) .icons-container {
-  margin-top: 22px;
-  padding-top: 12px;
-}
-.desktop-container:has(#orb-module-launcher) .icons {
-  height: 122px !important;
-  min-height: 122px !important;
-  align-content: start;
-}
-.desktop-container:has(#orb-module-launcher) #orb-module-launcher {
-  margin-top: 4px;
-  margin-bottom: 36px;
-  padding-top: 20px;
-}
+/* ORB desktop layout: native app tiles (ERPNext, Framework) restyled as cards */
+.desktop-container:has(#orb-module-launcher) { align-items:flex-start; }
+.desktop-container:has(#orb-module-launcher) .icons-container { width:min(920px, calc(100% - 48px)); max-width:none; margin:22px auto 0; padding-top:12px; }
+.desktop-container:has(#orb-module-launcher) #orb-module-launcher { width:100%; margin:30px 0 36px; padding-top:24px; }
+#orb-apps-heading { margin-bottom:16px; }
+.desktop-container:has(#orb-module-launcher) .icons { display:grid !important; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; width:100%; height:auto !important; min-height:0 !important; padding:0; justify-items:stretch; align-content:start; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode) { --orb-module-color:#2563EB; position:relative; display:flex; flex-direction:row; align-items:center; justify-content:flex-start; width:auto; height:auto; min-height:94px; margin:0; padding:16px; border:1px solid #e5e8ec; border-radius:16px; background:rgba(255,255,255,.94); box-shadow:0 2px 8px rgba(15,23,42,.04); overflow:hidden; text-align:start; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode):nth-child(2n) { --orb-module-color:#475467; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode)::before { content:""; position:absolute; inset:0 auto 0 0; width:4px; background:var(--orb-module-color); opacity:.88; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode)::after { content:""; position:absolute; width:90px; height:90px; right:-48px; top:-52px; border-radius:50%; background:var(--orb-module-color); opacity:.07; pointer-events:none; transition:transform .25s ease, opacity .25s ease; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode):hover { transform:translateY(-3px); border-color:color-mix(in srgb, var(--orb-module-color) 38%, #e5e8ec); box-shadow:0 14px 34px rgba(15,23,42,.11); }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode):hover::after { transform:scale(1.45); opacity:.11; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode) .icon-link { flex:0 0 auto; display:grid; place-items:center; width:52px; height:52px; margin:0 14px 0 0 !important; overflow:hidden; border-radius:14px; }
+[dir="rtl"] .desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode) .icon-link { margin:0 0 0 14px !important; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode) a { text-decoration:none !important; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode) .icon-link *,
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode) .icon-link img,
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode) .icon-link svg { width:52px !important; height:52px !important; max-width:52px; min-width:0; margin:0; border-radius:14px; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode) .icon-caption { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:4px; margin:0; text-align:start; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode) .icon-title { margin:0; color:#1d2939; font-size:14px; line-height:1.25; font-weight:680; text-align:start; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+.desktop-container:has(#orb-module-launcher) .icons > .desktop-icon:not(.desktop-edit-mode) .icon-subtitle { color:#7a8493; font-size:11px; text-align:start; opacity:1; }
+@media (max-width:900px) { .desktop-container:has(#orb-module-launcher) .icons-container { width:min(680px, calc(100% - 36px)); } .desktop-container:has(#orb-module-launcher) .icons { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+@media (max-width:560px) { .desktop-container:has(#orb-module-launcher) .icons-container { width:calc(100% - 28px); } .desktop-container:has(#orb-module-launcher) .icons { grid-template-columns:1fr; } }
+
+/* ORB drag-to-reorder */
+.orb-launcher-hint { margin-top:4px !important; font-size:11px !important; color:#98a2b3 !important; }
+.orb-module-card { user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; }
+.orb-module-grid.orb-is-sorting .orb-module-card { animation:none; opacity:1; transition:none; }
+.orb-module-grid.orb-is-sorting .orb-module-card:hover { transform:none; box-shadow:0 2px 8px rgba(15,23,42,.04); }
+.orb-module-card.orb-is-placeholder { opacity:1; background:color-mix(in srgb, var(--orb-module-color) 5%, transparent); border:2px dashed color-mix(in srgb, var(--orb-module-color) 45%, #d0d5dd); box-shadow:none; }
+.orb-module-card.orb-is-placeholder > * , .orb-module-card.orb-is-placeholder::before, .orb-module-card.orb-is-placeholder::after { visibility:hidden; }
+.orb-module-card.orb-is-ghost { position:fixed; z-index:2000; margin:0; opacity:1; animation:none; pointer-events:none; cursor:grabbing; transform:scale(1.04) rotate(-1.2deg); box-shadow:0 22px 48px rgba(15,23,42,.22); }
+.orb-module-card.orb-is-ghost.orb-is-dropping { transform:none; box-shadow:0 2px 8px rgba(15,23,42,.04); }
+body.orb-launcher-dragging, body.orb-launcher-dragging * { cursor:grabbing !important; user-select:none !important; }
