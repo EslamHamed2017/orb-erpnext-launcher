@@ -46,14 +46,35 @@
     });
   };
 
-  const run = () => { fixTitle(); fixFavicon(); fixNodes(document.body); };
+  // Odoo-style module names on a module's own page: the big heading and the tab title use the
+  // workspace's internal name, which is not renamed. Only exact matches inside the page header
+  // and the tab title change.
+  const workspaceNames = () => (window.frappe && frappe.boot && frappe.boot.orb_workspace_names) || {};
+
+  const fixModuleHeading = () => {
+    const names = workspaceNames();
+    if (!Object.keys(names).length) return;
+    document.querySelectorAll(".page-head .title-text, .page-head .page-title h3, .page-head .page-title .title-area span, .workspace-title").forEach((el) => {
+      el.childNodes.forEach((node) => {
+        if (node.nodeType !== Node.TEXT_NODE) return;
+        const text = node.nodeValue.trim();
+        if (names[text]) node.nodeValue = node.nodeValue.replace(text, __(names[text]));
+      });
+      const title = el.getAttribute("title");
+      if (title && names[title]) el.setAttribute("title", __(names[title]));
+    });
+    const [head, ...rest] = document.title.split(" | ");
+    if (names[head]) document.title = [__(names[head]), ...rest].join(" | ");
+  };
+
+  const run = () => { fixTitle(); fixFavicon(); fixNodes(document.body); fixModuleHeading(); };
   const schedule = () => { clearTimeout(timer); timer = setTimeout(run, 40); };
 
   const boot = () => {
     run();
     new MutationObserver(schedule).observe(document.body, {childList: true, subtree: true, characterData: true});
     const title = document.querySelector("title");
-    if (title) new MutationObserver(fixTitle).observe(title, {childList: true, characterData: true, subtree: true});
+    if (title) new MutationObserver(() => { fixTitle(); fixModuleHeading(); }).observe(title, {childList: true, characterData: true, subtree: true});
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once: true});

@@ -50,7 +50,9 @@
       link_to: row.link_to || null,
       url: row.url || null,
       icon: row.icon || null,
-      title: row.title || null,
+      // Send back the title the row had before the Odoo-style rename, so the new label is not
+      // saved as this user's own override.
+      title: ("orb_original_title" in row ? row.orb_original_title : row.title) || null,
       hidden: row.hidden ? 1 : 0,
     }));
     try {
@@ -101,6 +103,14 @@
 
   // The module's own workspace page (e.g. Projects -> /desk/projects), resolved from the boot
   // payload so it works on the Apps page too, where the desk sidebar is not built yet.
+  // A title the user gave the row wins; then the Odoo-style name; then Frappe's label.
+  const moduleLabel = (item) => {
+    const names = frappe.boot?.orb_module_names || {};
+    const row = ((frappe.boot?.dock || {})[DOCK_APP] || []).find((r) => r && r.link_type === "Sidebar" && r.link_to === item.link_to);
+    const own = row && row.title && !("orb_original_title" in row) && row.title !== item.link_to ? row.title : null;
+    return __(own || names[item.link_to] || item.label || item.title || item.link_to);
+  };
+
   const moduleRoute = (item) => {
     const module = item.module || item.link_to;
     const direct = workspacePages().find((p) => p.public && (p.name === module || p.name === item.label));
@@ -329,7 +339,7 @@
       card.innerHTML = `
         <span class="orb-module-icon" aria-hidden="true">${iconMarkup(item.icon)}</span>
         <span class="orb-module-copy">
-          <strong>${escapeHTML(__(item.title || item.link_to))}</strong>
+          <strong>${escapeHTML(moduleLabel(item))}</strong>
           <small>${escapeHTML(__("Open workspace"))}</small>
         </span>
         <span class="orb-module-arrow" aria-hidden="true">${iconMarkup("arrow-up-right")}</span>`;
