@@ -1,0 +1,110 @@
+Account Name,Parent Account,Account Number,Parent Account Number,Is Group,Account Type,Root Type,Account Currency
+Assets,,1000,,1,,Asset,
+Current Assets,Assets,1100,1000,1,,,
+Cash,Current Assets,1110,1100,1,Cash,,
+Petty Cash - AED,Cash,1111,1110,0,Cash,,AED
+Banks,Current Assets,1120,1100,1,Bank,,
+Emirates NBD - AED,Banks,1121,1120,0,Bank,,AED
+Emirates NBD - USD,Banks,1122,1120,0,Bank,,USD
+Emirates NBD - SAR,Banks,1123,1120,0,Bank,,SAR
+Bank Margin on LC and LG,Banks,1124,1120,0,,,AED
+Accounts Receivable,Current Assets,1130,1100,1,Receivable,,
+Debtors - AED,Accounts Receivable,1131,1130,0,Receivable,,AED
+Debtors - USD,Accounts Receivable,1132,1130,0,Receivable,,USD
+Debtors - SAR,Accounts Receivable,1133,1130,0,Receivable,,SAR
+Post-Dated Cheques Received,Accounts Receivable,1134,1130,0,,,AED
+Advances to Suppliers,Current Assets,1140,1100,1,,,
+Supplier Advances - USD,Advances to Suppliers,1141,1140,0,,,USD
+Supplier Advances - AED,Advances to Suppliers,1142,1140,0,,,AED
+Prepayments and Deposits,Current Assets,1150,1100,1,,,
+Prepaid Expenses,Prepayments and Deposits,1151,1150,0,,,AED
+Refundable Deposits,Prepayments and Deposits,1152,1150,0,,,AED
+Visa Deposits,Prepayments and Deposits,1153,1150,0,,,AED
+VAT Input 5%,Current Assets,1160,1100,0,Tax,,AED
+Inventory,Current Assets,1170,1100,1,Stock,,
+Coffee Stock,Inventory,1171,1170,0,Stock,,AED
+Other Receivables,Current Assets,1180,1100,1,,,
+Employee Advances,Other Receivables,1181,1180,0,,,AED
+Temporary Opening,Current Assets,1190,1100,0,Temporary,,AED
+Fixed Assets,Assets,1200,1000,1,,,
+Furniture and Office Equipment,Fixed Assets,1210,1200,0,Fixed Asset,,AED
+Computers,Fixed Assets,1220,1200,0,Fixed Asset,,AED
+Vehicles,Fixed Assets,1230,1200,0,Fixed Asset,,AED
+Accumulated Depreciation,Fixed Assets,1290,1200,0,Accumulated Depreciation,,AED
+Liabilities,,2000,,1,,Liability,
+Current Liabilities,Liabilities,2100,2000,1,,,
+Accounts Payable,Current Liabilities,2110,2100,1,Payable,,
+Creditors - AED,Accounts Payable,2111,2110,0,Payable,,AED
+Creditors - USD,Accounts Payable,2112,2110,0,Payable,,USD
+Creditors - SAR,Accounts Payable,2113,2110,0,Payable,,SAR
+Post-Dated Cheques Issued,Accounts Payable,2114,2110,0,,,AED
+Advances from Customers,Current Liabilities,2120,2100,1,,,
+Customer Advances - USD,Advances from Customers,2121,2120,0,,,USD
+Customer Advances - SAR,Advances from Customers,2122,2120,0,,,SAR
+Customer Advances - AED,Advances from Customers,2123,2120,0,,,AED
+VAT Liabilities,Current Liabilities,2130,2100,1,Tax,,
+VAT Output 5%,VAT Liabilities,2131,2130,0,Tax,,AED
+VAT Payable,VAT Liabilities,2132,2130,0,Tax,,AED
+Corporate Tax Payable 9%,Current Liabilities,2140,2100,0,Tax,,AED
+Accrued Expenses,Current Liabilities,2150,2100,1,,,
+Accrued Audit Fees,Accrued Expenses,2151,2150,0,,,AED
+Other Accrued Expenses,Accrued Expenses,2152,2150,0,,,AED
+Salaries Payable,Current Liabilities,2160,2100,0,,,AED
+Stock Received But Not Billed,Current Liabilities,2170,2100,0,Stock Received But Not Billed,,AED
+Partners Current Account,Current Liabilities,2180,2100,0,,,AED
+Credit Notes to Customers,Current Liabilities,2190,2100,0,,,AED
+Non-Current Liabilities,Liabilities,2200,2000,1,,,
+End of Service Benefits Provision,Non-Current Liabilities,2210,2200,0,,,AED
+Partners Loans,Non-Current Liabilities,2220,2200,0,,,AED
+Equity,,3000,,1,Equity,Equity,
+Share Capital,Equity,3100,3000,0,Equity,,AED
+Retained Earnings,Equity,3200,3000,0,Equity,,AED
+Partners Drawings,Equity,3300,3000,0,Equity,,AED
+Income,,4000,,1,,Income,
+Green Coffee Sales,Income,4100,4000,1,Direct Income,,
+Export Sales,Green Coffee Sales,4110,4100,0,Income Account,,AED
+Local Sales,Green Coffee Sales,4120,4100,0,Income Account,,AED
+Other Income,Income,4200,4000,1,Indirect Income,,
+Discounts Received,Other Income,4210,4200,0,Income Account,,AED
+Cost of Sales,,5000,,1,Direct Expense,Expense,
+Cost of Coffee Sold,Cost of Sales,5100,5000,0,Cost of Goods Sold,,AED
+Stock Adjustment,Cost of Sales,5110,5000,0,Stock Adjustment,,AED
+Expenses Included in Valuation,Cost of Sales,5120,5000,0,Expenses Included In Valuation,,AED
+Direct Trade Expenses,Cost of Sales,5200,5000,1,,,
+Freight and Shipping,Direct Trade Expenses,5210,5200,0,Chargeable,,AED
+Inspection and Certificates,Direct Trade Expenses,5220,5200,0,Chargeable,,AED
+Cargo Insurance,Direct Trade Expenses,5230,5200,0,Chargeable,,AED
+Sales Commissions,Direct Trade Expenses,5240,5200,0,Expense Account,,AED
+Trade Bank Charges,Direct Trade Expenses,5250,5200,0,Expense Account,,AED
+Demurrage and Port Charges,Direct Trade Expenses,5260,5200,0,Expense Account,,AED
+General and Administrative Expenses,,6000,,1,Indirect Expense,Expense,
+Salaries and Benefits,General and Administrative Expenses,6100,6000,1,,,
+Salaries and Wages,Salaries and Benefits,6110,6100,0,Expense Account,,AED
+Housing Allowance,Salaries and Benefits,6111,6100,0,Expense Account,,AED
+Leave Salary and Air Tickets,Salaries and Benefits,6112,6100,0,Expense Account,,AED
+End of Service Benefits,Salaries and Benefits,6120,6100,0,Expense Account,,AED
+Visa and Labour Fees,Salaries and Benefits,6130,6100,0,Expense Account,,AED
+Medical Insurance,Salaries and Benefits,6140,6100,0,Expense Account,,AED
+Office Expenses,General and Administrative Expenses,6200,6000,1,,,
+Rent,Office Expenses,6210,6200,0,Expense Account,,AED
+Utilities (DEWA),Office Expenses,6220,6200,0,Expense Account,,AED
+Telephone and Internet,Office Expenses,6230,6200,0,Expense Account,,AED
+Office Supplies,Office Expenses,6240,6200,0,Expense Account,,AED
+Government Fees,General and Administrative Expenses,6300,6000,1,,,
+Trade Licence Fees,Government Fees,6310,6300,0,Expense Account,,AED
+Other Government Fees,Government Fees,6320,6300,0,Expense Account,,AED
+Professional Fees,General and Administrative Expenses,6400,6000,1,,,
+Audit Fees,Professional Fees,6410,6400,0,Expense Account,,AED
+Legal Fees,Professional Fees,6420,6400,0,Expense Account,,AED
+Accounting and Consulting Fees,Professional Fees,6430,6400,0,Expense Account,,AED
+General Bank Charges,General and Administrative Expenses,6500,6000,0,Expense Account,,AED
+Travel,General and Administrative Expenses,6600,6000,0,Expense Account,,AED
+Marketing and Advertising,General and Administrative Expenses,6700,6000,0,Expense Account,,AED
+Depreciation,General and Administrative Expenses,6800,6000,0,Depreciation,,AED
+Exchange Gain/Loss,General and Administrative Expenses,6900,6000,0,,,AED
+Unrealized Exchange Gain/Loss,General and Administrative Expenses,6901,6000,0,,,AED
+Round Off,General and Administrative Expenses,6910,6000,0,Round Off,,AED
+Bad Debts,General and Administrative Expenses,6920,6000,0,Expense Account,,AED
+Write Off,General and Administrative Expenses,6930,6000,0,Expense Account,,AED
+Corporate Tax,,7000,,1,,Expense,
+Corporate Tax Expense 9%,Corporate Tax,7100,7000,0,Tax,,AED

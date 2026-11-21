@@ -1,44 +1,71 @@
 (() => {
   "use strict";
   const MOUNT_ID = "orb-module-launcher";
+  // Each module keeps its colour wherever it is moved (these match the original default order).
+  const MODULE_COLORS = {
+    Projects: "#6D5BD0", Setup: "#2563EB", Accounts: "#059669", Selling: "#EA580C", Buying: "#0891B2",
+    Stock: "#D97706", Manufacturing: "#C026D3", Assets: "#4F46E5", Quality: "#6D5BD0", CRM: "#2563EB", Support: "#059669"
+  };
   const PALETTE = ["#6D5BD0", "#2563EB", "#059669", "#EA580C", "#0891B2", "#D97706", "#C026D3", "#4F46E5"];
   const APPS_HEADING_ID = "orb-apps-heading";
-  const ORDER_KEY = "orb_launcher_module_order";
+  // Cards and the sidebar rail share one order: the user's own layer of the ERPNext dock, the
+  // same one Frappe's "Arrange dock" writes. Reordering cards saves that layer; reordering the
+  // dock updates `frappe.boot.dock`, which the cards are read from. Only order changes.
+  const DOCK_APP = "erpnext";
+  const SAVE_USER_DOCK = "frappe.desk.doctype.dock.dock.save_user_dock";
   const HOLD_MS = 350;
   let timer = null;
   let dragging = false;
 
-  const storageKey = () => `${ORDER_KEY}:${frappe.session?.user || "guest"}`;
+  const isModuleRow = (row) => row && row.hidden !== 1 && row.link_type === "Sidebar" && row.link_to;
 
-  const savedOrder = () => {
-    let value = null;
-    try { value = localStorage.getItem(storageKey()); } catch (error) { /* storage blocked */ }
-    if (!value) value = frappe.boot?.user?.defaults?.[ORDER_KEY] || null;
-    try { const order = JSON.parse(value || "[]"); return Array.isArray(order) ? order : []; }
-    catch (error) { return []; }
-  };
-
-  const saveOrder = (order) => {
-    const value = JSON.stringify(order);
-    try { localStorage.setItem(storageKey(), value); } catch (error) { /* storage blocked */ }
+  const refreshSidebar = () => {
     try {
-      if (frappe.boot?.user?.defaults) frappe.boot.user.defaults[ORDER_KEY] = value;
-      frappe.call({
-        method: "frappe.core.doctype.session_default_settings.session_default_settings.set_session_default_values",
-        args: {default_values: {[ORDER_KEY]: value}},
-        freeze: false
-      });
-    } catch (error) { /* local order still applies */ }
+      const sidebar = frappe.app?.sidebar;
+      sidebar?.refresh_dock?.();
+      sidebar?.refresh_header?.();
+    } catch (error) { /* the cards are already right; the rail redraws on next load */ }
   };
 
-  const applyOrder = (modules) => {
-    const order = savedOrder();
-    if (!order.length) return modules;
-    const rank = new Map(order.map((key, index) => [key, index]));
-    return modules
-      .map((item, index) => ({item, index}))
-      .sort((a, b) => (rank.get(a.item.link_to) ?? order.length + a.index) - (rank.get(b.item.link_to) ?? order.length + b.index))
-      .map(({item}) => item);
+  const setRail = (rail) => {
+    frappe.boot.dock = {...(frappe.boot.dock || {}), [DOCK_APP]: rail};
+    refreshSidebar();
+  };
+
+  // Put the module rows in `order` into the slots module rows already hold, so hidden rows and
+  // rows of other kinds (workspaces, URLs) keep their places.
+  const saveOrder = (order) => {
+    const rows = ((frappe.boot.dock || {})[DOCK_APP] || []).slice();
+    const slots = [];
+    rows.forEach((row, index) => { if (isModuleRow(row)) slots.push(index); });
+    const moved = order.map((key) => rows.find((row) => isModuleRow(row) && row.link_to === key)).filter(Boolean);
+    if (moved.length !== slots.length) return;
+
+    const previous = rows.slice();
+    slots.forEach((slot, i) => { rows[slot] = moved[i]; });
+    setRail(rows);
+
+    const items = rows.filter(Boolean).map((row) => ({
+      link_type: row.link_type,
+      link_to: row.link_to || null,
+      url: row.url || null,
+      icon: row.icon || null,
+      // Send back the title the row had before the Odoo-style rename, so the new label is not
+      // saved as this user's own override.
+      title: ("orb_original_title" in row ? row.orb_original_title : row.title) || null,
+      hidden: row.hidden ? 1 : 0,
+    }));
+    try {
+      frappe.xcall(SAVE_USER_DOCK, {app: DOCK_APP, items: JSON.stringify(items)})
+        .then((rail) => { if (Array.isArray(rail)) setRail(rail); })
+        .catch(() => {
+          setRail(previous);
+          const mount = document.getElementById(MOUNT_ID);
+          if (mount) mount.dataset.signature = "";
+          schedule();
+          frappe.show_alert?.({message: __("Could not save the new order"), indicator: "red"});
+        });
+    } catch (error) { /* xcall unavailable: order stays for this page only */ }
   };
 
   const escapeHTML = (value) => String(value ?? "").replace(/[&<>'"]/g, (char) => ({
@@ -46,12 +73,17 @@
   })[char]);
 
   const visibleModules = () => {
-    const raw = ((frappe.boot.dock || {}).erpnext || [])
-      .filter((item) => item && item.hidden !== 1 && item.link_type === "Sidebar" && item.link_to);
+    const raw = ((frappe.boot.dock || {})[DOCK_APP] || []).filter(isModuleRow);
     const sidebar = frappe.app?.sidebar;
-    return raw.map((item, index) => {
+    const colorOf = (key) => {
+      if (MODULE_COLORS[key]) return MODULE_COLORS[key];
+      let hash = 0;
+      for (const char of String(key)) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+      return PALETTE[hash % PALETTE.length];
+    };
+    return raw.map((item) => {
       const entry = sidebar?.dock_entry ? sidebar.dock_entry(item) : item;
-      if (entry) entry.__orb_color = PALETTE[index % PALETTE.length];
+      if (entry) entry.__orb_color = colorOf(item.link_to);
       return entry;
     }).filter(Boolean);
   };
@@ -71,6 +103,14 @@
 
   // The module's own workspace page (e.g. Projects -> /desk/projects), resolved from the boot
   // payload so it works on the Apps page too, where the desk sidebar is not built yet.
+  // A title the user gave the row wins; then the Odoo-style name; then Frappe's label.
+  const moduleLabel = (item) => {
+    const names = frappe.boot?.orb_module_names || {};
+    const row = ((frappe.boot?.dock || {})[DOCK_APP] || []).find((r) => r && r.link_type === "Sidebar" && r.link_to === item.link_to);
+    const own = row && row.title && !("orb_original_title" in row) && row.title !== item.link_to ? row.title : null;
+    return __(own || names[item.link_to] || item.label || item.title || item.link_to);
+  };
+
   const moduleRoute = (item) => {
     const module = item.module || item.link_to;
     const direct = workspacePages().find((p) => p.public && (p.name === module || p.name === item.label));
@@ -190,7 +230,7 @@
       }, 170);
       saveOrder(cards().map((card) => card.dataset.module));
       const mount = document.getElementById(MOUNT_ID);
-      if (mount) mount.dataset.signature = signatureOf(applyOrder(visibleModules()));
+      if (mount) mount.dataset.signature = signatureOf(visibleModules());
     };
 
     moduleGrid.addEventListener("pointerdown", (event) => {
@@ -244,7 +284,7 @@
     if (!appTiles.length) return;
     const grid = appTiles[0].parentElement;
     if (!grid || !grid.parentElement) return;
-    const modules = applyOrder(visibleModules());
+    const modules = visibleModules();
     if (!modules.length) return;
     if (!document.getElementById(APPS_HEADING_ID)) {
       const heading = document.createElement("div");
@@ -252,11 +292,19 @@
       heading.className = "orb-launcher-heading";
       heading.innerHTML = `
         <div>
-          <span class="orb-launcher-kicker">ORB MANAGEMENT SYSTEM</span>
           <h2>${escapeHTML(__("Applications"))}</h2>
         </div>`;
       grid.insertAdjacentElement("beforebegin", heading);
     }
+    appTiles.forEach((tile) => {
+      const caption = tile.querySelector(".icon-caption");
+      if (caption && !caption.querySelector(".icon-subtitle, .orb-app-subtitle")) {
+        const sub = document.createElement("span");
+        sub.className = "orb-app-subtitle";
+        sub.textContent = __("Open app");
+        caption.appendChild(sub);
+      }
+    });
     const signature = signatureOf(modules);
     let mount = document.getElementById(MOUNT_ID);
     if (mount && mount.dataset.signature === signature && mount.parentElement === grid.parentElement) return;
@@ -269,6 +317,7 @@
     mount.innerHTML = `
       <div class="orb-launcher-heading">
         <div>
+          <span class="orb-launcher-kicker">ORB MANAGEMENT SYSTEM</span>
           <h2>${escapeHTML(__("Business Modules"))}</h2>
           <p>${escapeHTML(__("Quick access to the modules enabled in your sidebar"))}</p>
           <p class="orb-launcher-hint">${escapeHTML(__("Press and hold a module to rearrange"))}</p>
@@ -290,7 +339,7 @@
       card.innerHTML = `
         <span class="orb-module-icon" aria-hidden="true">${iconMarkup(item.icon)}</span>
         <span class="orb-module-copy">
-          <strong>${escapeHTML(__(item.title || item.link_to))}</strong>
+          <strong>${escapeHTML(moduleLabel(item))}</strong>
           <small>${escapeHTML(__("Open workspace"))}</small>
         </span>
         <span class="orb-module-arrow" aria-hidden="true">${iconMarkup("arrow-up-right")}</span>`;
@@ -299,10 +348,10 @@
     });
   };
 
-  const schedule = () => {
+  function schedule() {
     clearTimeout(timer);
     timer = setTimeout(render, 60);
-  };
+  }
 
   const boot = () => {
     schedule();
