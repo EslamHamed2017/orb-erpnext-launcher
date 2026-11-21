@@ -65,10 +65,15 @@ def apply_site_branding():
 	This changes only System Settings → App Name. The internal ``erpnext`` app name,
 	routes and data remain untouched.
 	"""
-	current = frappe.db.get_single_value("System Settings", "app_name") or ""
-	if current.strip() != BRAND_NAME:
-		frappe.db.set_single_value("System Settings", "app_name", BRAND_NAME)
+	changed = False
+	for doctype in ("System Settings", "Website Settings"):
+		current = frappe.db.get_single_value(doctype, "app_name") or ""
+		if current.strip() != BRAND_NAME:
+			frappe.db.set_single_value(doctype, "app_name", BRAND_NAME)
+			changed = True
+	if changed:
 		frappe.clear_cache()
+		frappe.clear_website_cache()
 
 
 def rename_modules(bootinfo):

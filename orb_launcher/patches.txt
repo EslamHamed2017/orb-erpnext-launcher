@@ -6,3 +6,4 @@
 # Patches added in this section will be executed after doctypes are migrated
 orb_launcher.patches.v0_3.apply_basetaa_branding
 orb_launcher.patches.v0_6.enforce_basetaa_branding
+orb_launcher.patches.v0_6.enforce_website_branding
