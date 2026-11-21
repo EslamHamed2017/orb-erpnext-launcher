@@ -74,6 +74,7 @@ def apply_site_branding():
 			"brand_html": f"<strong>{BRAND_NAME}</strong>",
 			"app_logo": BRAND_LOGO,
 			"favicon": BRAND_LOGO,
+			"footer_powered": "Implemented by Basetaa",
 		},
 	}
 	for doctype, values in display_values.items():
