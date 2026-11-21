@@ -23,7 +23,11 @@
     try { localStorage.setItem(storageKey(), value); } catch (error) { /* storage blocked */ }
     try {
       if (frappe.boot?.user?.defaults) frappe.boot.user.defaults[ORDER_KEY] = value;
-      frappe.call({method: "frappe.client.set_default", args: {key: ORDER_KEY, value}, freeze: false});
+      frappe.call({
+        method: "frappe.core.doctype.session_default_settings.session_default_settings.set_session_default_values",
+        args: {default_values: {[ORDER_KEY]: value}},
+        freeze: false
+      });
     } catch (error) { /* local order still applies */ }
   };
 
