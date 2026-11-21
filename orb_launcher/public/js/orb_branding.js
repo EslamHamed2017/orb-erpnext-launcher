@@ -90,6 +90,24 @@
     });
   };
 
+  const fixDockManagerLabels = () => {
+    const names = (window.frappe && frappe.boot && frappe.boot.orb_module_names) || {};
+    document.querySelectorAll(".modal.show .ws-arrangement").forEach((arrangement) => {
+      const rows = Array.from(arrangement.querySelectorAll(".ws-item[data-key]"));
+      const preview = arrangement.closest(".modal")?.querySelectorAll(".ws-preview .ws-preview-item") || [];
+      rows.forEach((row, index) => {
+        const parts = (row.dataset.key || "").split("|");
+        const internal = parts[0] === "Sidebar" ? parts[1] : null;
+        if (!internal || !names[internal]) return;
+        const label = __(names[internal]);
+        const rowLabel = row.querySelector(".ws-item-label");
+        if (rowLabel) rowLabel.textContent = label;
+        const previewLabel = preview[index]?.querySelector(".ws-item-label");
+        if (previewLabel) previewLabel.textContent = label;
+      });
+    });
+  };
+
   const run = () => {
     fixTitle();
     fixFavicon();
@@ -97,6 +115,7 @@
     fixModuleHeading();
     fixDockLabels();
     fixWorkspaceSearchLabels();
+    fixDockManagerLabels();
   };
   const schedule = () => { clearTimeout(timer); timer = setTimeout(run, 40); };
 
