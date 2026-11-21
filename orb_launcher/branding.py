@@ -72,8 +72,10 @@ def apply_site_branding():
 			frappe.db.set_single_value(doctype, "app_name", BRAND_NAME)
 			changed = True
 	if changed:
+		from frappe.website.utils import clear_website_cache
+
 		frappe.clear_cache()
-		frappe.clear_website_cache()
+		clear_website_cache()
 
 
 def rename_modules(bootinfo):
