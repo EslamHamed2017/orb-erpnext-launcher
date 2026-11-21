@@ -8,6 +8,10 @@ import frappe
 
 BRAND_NAME = "Basetaa ERP"
 BRAND_LOGO = "/assets/orb_launcher/images/basetaa-logo.svg"
+LOGIN_BRAND_NAME = "ORB Management System"
+LOGIN_BRAND_HTML = "<strong>ORB Management System</strong>"
+LOGIN_BRAND_LOGO = "/files/ORB_Management_System_Logo.svg"
+LOGIN_FOOTER = "<span>Powered by ERPNext</span>"
 REBRANDED_APP = "erpnext"
 OLD_NAMES = {"ERPNext", "ERPNext ", ""}
 
@@ -67,14 +71,16 @@ def apply_site_branding():
 	"""
 	changed = False
 	display_values = {
+		# Desk/email display branding stays Basetaa ERP.
 		"System Settings": {"app_name": BRAND_NAME},
+		# The approved customer-facing login remains ORB-branded.
 		"Website Settings": {
-			"app_name": BRAND_NAME,
-			"title_prefix": BRAND_NAME,
-			"brand_html": f"<strong>{BRAND_NAME}</strong>",
-			"app_logo": BRAND_LOGO,
-			"favicon": BRAND_LOGO,
-			"footer_powered": "Implemented by Basetaa",
+			"app_name": LOGIN_BRAND_NAME,
+			"title_prefix": LOGIN_BRAND_NAME,
+			"brand_html": LOGIN_BRAND_HTML,
+			"app_logo": LOGIN_BRAND_LOGO,
+			"favicon": LOGIN_BRAND_LOGO,
+			"footer_powered": LOGIN_FOOTER,
 		},
 	}
 	for doctype, values in display_values.items():
