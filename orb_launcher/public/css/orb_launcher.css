@@ -1,0 +1,52 @@
+#orb-module-launcher {
+  width: min(920px, calc(100% - 48px));
+  margin: 38px auto 80px;
+  padding-top: 30px;
+  border-top: 1px solid var(--border-color, #e7e9ed);
+  animation: orb-launcher-rise .45s ease both;
+}
+.orb-launcher-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:22px; }
+.orb-launcher-kicker { display:block; margin-bottom:6px; color:#28536b; font-size:10px; line-height:1.2; font-weight:750; letter-spacing:.16em; }
+.orb-launcher-heading h2 { margin:0; color:var(--text-color, #1f2937); font-size:22px; line-height:1.25; font-weight:720; }
+.orb-launcher-heading p { margin:6px 0 0; color:var(--text-muted, #667085); font-size:13px; }
+.orb-launcher-count { flex:0 0 auto; padding:7px 11px; border:1px solid #dce4e9; border-radius:999px; background:#f6f9fa; color:#28536b; font-size:11px; font-weight:650; }
+.orb-module-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
+.orb-module-card { --orb-module-color:#28536b; position:relative; display:flex; align-items:center; min-height:94px; padding:16px; border:1px solid #e5e8ec; border-radius:16px; background:rgba(255,255,255,.94); color:var(--text-color, #1f2937); text-decoration:none !important; box-shadow:0 2px 8px rgba(15,23,42,.04); overflow:hidden; opacity:0; transform:translateY(8px); animation:orb-card-enter .42s ease forwards; animation-delay:var(--orb-module-delay); transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.orb-module-card::before { content:""; position:absolute; inset:0 auto 0 0; width:4px; background:var(--orb-module-color); opacity:.88; }
+.orb-module-card::after { content:""; position:absolute; width:90px; height:90px; right:-48px; top:-52px; border-radius:50%; background:var(--orb-module-color); opacity:.07; transition:transform .25s ease, opacity .25s ease; }
+.orb-module-card:hover { transform:translateY(-3px); border-color:color-mix(in srgb, var(--orb-module-color) 38%, #e5e8ec); box-shadow:0 14px 34px rgba(15,23,42,.11); color:var(--text-color, #1f2937); }
+.orb-module-card:hover::after { transform:scale(1.45); opacity:.11; }
+.orb-module-icon { flex:0 0 auto; display:grid; place-items:center; width:52px; height:52px; margin-inline-end:14px; border-radius:14px; background:color-mix(in srgb, var(--orb-module-color) 12%, white); color:var(--orb-module-color); }
+.orb-module-icon svg { width:26px; height:26px; stroke-width:1.8; }
+.orb-module-copy { min-width:0; display:flex; flex-direction:column; gap:4px; }
+.orb-module-copy strong { color:#1d2939; font-size:14px; line-height:1.25; font-weight:680; }
+.orb-module-copy small { color:#7a8493; font-size:11px; }
+.orb-module-arrow { display:grid; place-items:center; width:26px; height:26px; margin-inline-start:auto; color:#98a2b3; opacity:0; transform:translate(-5px,5px); transition:opacity .2s ease, transform .2s ease, color .2s ease; }
+.orb-module-arrow svg { width:15px; height:15px; }
+.orb-module-card:hover .orb-module-arrow { opacity:1; transform:none; color:var(--orb-module-color); }
+.orb-module-fallback { font-size:20px; font-weight:750; }
+@keyframes orb-launcher-rise { from {opacity:0; transform:translateY(8px)} to {opacity:1; transform:none} }
+@keyframes orb-card-enter { to {opacity:1; transform:none} }
+@media (max-width:900px) { #orb-module-launcher {width:min(680px,calc(100% - 36px))}.orb-module-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:560px) { #orb-module-launcher{width:calc(100% - 28px);margin-top:28px;padding-top:22px}.orb-launcher-heading{align-items:flex-start}.orb-launcher-count{display:none}.orb-module-grid{grid-template-columns:1fr}.orb-module-card{min-height:82px}.orb-module-icon{width:46px;height:46px} }
+@media (prefers-reduced-motion:reduce) { #orb-module-launcher,.orb-module-card{animation:none;opacity:1;transform:none}.orb-module-card{transition:none} }
+
+
+/* ORB compact desktop layout */
+.desktop-container:has(#orb-module-launcher) {
+  align-items: flex-start;
+}
+.desktop-container:has(#orb-module-launcher) .icons-container {
+  margin-top: 22px;
+  padding-top: 12px;
+}
+.desktop-container:has(#orb-module-launcher) .icons {
+  height: 122px !important;
+  min-height: 122px !important;
+  align-content: start;
+}
+.desktop-container:has(#orb-module-launcher) #orb-module-launcher {
+  margin-top: 4px;
+  margin-bottom: 36px;
+  padding-top: 20px;
+}
