@@ -67,7 +67,56 @@
     if (names[head]) document.title = [__(names[head]), ...rest].join(" | ");
   };
 
-  const run = () => { fixTitle(); fixFavicon(); fixNodes(document.body); fixModuleHeading(); };
+  const fixDockLabels = () => {
+    const names = (window.frappe && frappe.boot && frappe.boot.orb_module_names) || {};
+    document.querySelectorAll("#desk-dock .dock-items .dock-item").forEach((item) => {
+      const current = item.dataset.orbModule || item.getAttribute("aria-label") || item.querySelector(".dock-item-label")?.textContent?.trim();
+      if (!current || !names[current]) return;
+      item.dataset.orbModule = current;
+      const label = __(names[current]);
+      item.setAttribute("aria-label", label);
+      if (item.hasAttribute("title")) item.setAttribute("title", label);
+      const text = item.querySelector(".dock-item-label");
+      if (text) text.textContent = label;
+    });
+  };
+
+  const fixWorkspaceSearchLabels = () => {
+    const names = (window.frappe && frappe.boot && frappe.boot.orb_module_names) || {};
+    document.querySelectorAll('[role="dialog"] a[href*="/desk/Workspaces/"]').forEach((link) => {
+      const strong = link.querySelector("b");
+      const internal = strong?.textContent?.trim();
+      if (internal && names[internal]) strong.textContent = __(names[internal]);
+    });
+  };
+
+  const fixDockManagerLabels = () => {
+    const names = (window.frappe && frappe.boot && frappe.boot.orb_module_names) || {};
+    document.querySelectorAll(".modal.show .ws-arrangement").forEach((arrangement) => {
+      const rows = Array.from(arrangement.querySelectorAll(".ws-item[data-key]"));
+      const preview = arrangement.closest(".modal")?.querySelectorAll(".ws-preview .ws-preview-item") || [];
+      rows.forEach((row, index) => {
+        const parts = (row.dataset.key || "").split("|");
+        const internal = parts[0] === "Sidebar" ? parts[1] : null;
+        if (!internal || !names[internal]) return;
+        const label = __(names[internal]);
+        const rowLabel = row.querySelector(".ws-item-label");
+        if (rowLabel) rowLabel.textContent = label;
+        const previewLabel = preview[index]?.querySelector(".ws-item-label");
+        if (previewLabel) previewLabel.textContent = label;
+      });
+    });
+  };
+
+  const run = () => {
+    fixTitle();
+    fixFavicon();
+    fixNodes(document.body);
+    fixModuleHeading();
+    fixDockLabels();
+    fixWorkspaceSearchLabels();
+    fixDockManagerLabels();
+  };
   const schedule = () => { clearTimeout(timer); timer = setTimeout(run, 40); };
 
   const boot = () => {

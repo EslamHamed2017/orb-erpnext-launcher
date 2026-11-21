@@ -8,6 +8,10 @@ import frappe
 
 BRAND_NAME = "Basetaa ERP"
 BRAND_LOGO = "/assets/orb_launcher/images/basetaa-logo.svg"
+LOGIN_BRAND_NAME = "ORB Management System"
+LOGIN_BRAND_HTML = "<strong>ORB Management System</strong>"
+LOGIN_BRAND_LOGO = "/files/orb-system-by-basetaa.svg"
+LOGIN_FOOTER = "<span>Powered by ERPNext</span>"
 REBRANDED_APP = "erpnext"
 OLD_NAMES = {"ERPNext", "ERPNext ", ""}
 
@@ -60,14 +64,35 @@ def boot_session(bootinfo):
 
 
 def apply_site_branding():
-	"""Name used on the login page, emails and page titles (System Settings → App Name).
+	"""Set the display name used on the login page, emails and page titles.
 
-	Only set when it is still a default value, so a name an admin chose is kept.
+	This changes only System Settings → App Name. The internal ``erpnext`` app name,
+	routes and data remain untouched.
 	"""
-	current = frappe.db.get_single_value("System Settings", "app_name") or ""
-	if current.strip() in OLD_NAMES or current.strip() == "Frappe":
-		frappe.db.set_single_value("System Settings", "app_name", BRAND_NAME)
+	changed = False
+	display_values = {
+		# Desk/email display branding stays Basetaa ERP.
+		"System Settings": {"app_name": BRAND_NAME},
+		# The approved customer-facing login remains ORB-branded.
+		"Website Settings": {
+			"app_name": LOGIN_BRAND_NAME,
+			"title_prefix": LOGIN_BRAND_NAME,
+			"brand_html": LOGIN_BRAND_HTML,
+			"app_logo": LOGIN_BRAND_LOGO,
+			"favicon": LOGIN_BRAND_LOGO,
+			"footer_powered": LOGIN_FOOTER,
+		},
+	}
+	for doctype, values in display_values.items():
+		for field, value in values.items():
+			if frappe.db.get_single_value(doctype, field) != value:
+				frappe.db.set_single_value(doctype, field, value)
+				changed = True
+	if changed:
+		from frappe.website.utils import clear_website_cache
+
 		frappe.clear_cache()
+		clear_website_cache()
 
 
 def rename_modules(bootinfo):

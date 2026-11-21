@@ -6,9 +6,9 @@ app_email = "support@basetaa.com"
 app_license = "MIT"
 
 # Add the launcher to every authenticated Desk session.
-app_include_js = ["/assets/orb_launcher/js/orb_branding.js?v=0.6.1", "/assets/orb_launcher/js/orb_launcher.js?v=0.6.1"]
-app_include_css = ["/assets/orb_launcher/css/orb_launcher.css?v=0.6.1"]
-web_include_js = ["/assets/orb_launcher/js/orb_branding.js?v=0.6.1"]
+app_include_js = ["/assets/orb_launcher/js/orb_branding.js?v=0.6.5", "/assets/orb_launcher/js/orb_launcher.js?v=0.6.5"]
+app_include_css = ["/assets/orb_launcher/css/orb_launcher.css?v=0.6.5"]
+web_include_js = ["/assets/orb_launcher/js/orb_branding.js?v=0.6.5"]
 
 # Display-only rebrand of ERPNext as "Basetaa ERP" (see orb_launcher/branding.py)
 boot_session = "orb_launcher.branding.boot_session"
