@@ -6,7 +6,7 @@ Petty Cash - AED,Cash,1111,1110,0,Cash,,AED
 Banks,Current Assets,1120,1100,1,Bank,,
 Emirates NBD - AED,Banks,1121,1120,0,Bank,,AED
 Emirates NBD - USD,Banks,1122,1120,0,Bank,,USD
-SAR Bank Account,Banks,1123,1120,0,Bank,,SAR
+Emirates NBD - SAR,Banks,1123,1120,0,Bank,,SAR
 Bank Margin on LC and LG,Banks,1124,1120,0,,,AED
 Accounts Receivable,Current Assets,1130,1100,1,Receivable,,
 Debtors - AED,Accounts Receivable,1131,1130,0,Receivable,,AED
