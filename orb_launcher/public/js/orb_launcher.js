@@ -248,11 +248,19 @@
       heading.className = "orb-launcher-heading";
       heading.innerHTML = `
         <div>
-          <span class="orb-launcher-kicker">ORB MANAGEMENT SYSTEM</span>
           <h2>${escapeHTML(__("Applications"))}</h2>
         </div>`;
       grid.insertAdjacentElement("beforebegin", heading);
     }
+    appTiles.forEach((tile) => {
+      const caption = tile.querySelector(".icon-caption");
+      if (caption && !caption.querySelector(".icon-subtitle, .orb-app-subtitle")) {
+        const sub = document.createElement("span");
+        sub.className = "orb-app-subtitle";
+        sub.textContent = __("Open app");
+        caption.appendChild(sub);
+      }
+    });
     const signature = signatureOf(modules);
     let mount = document.getElementById(MOUNT_ID);
     if (mount && mount.dataset.signature === signature && mount.parentElement === grid.parentElement) return;
@@ -265,6 +273,7 @@
     mount.innerHTML = `
       <div class="orb-launcher-heading">
         <div>
+          <span class="orb-launcher-kicker">ORB MANAGEMENT SYSTEM</span>
           <h2>${escapeHTML(__("Business Modules"))}</h2>
           <p>${escapeHTML(__("Quick access to the modules enabled in your sidebar"))}</p>
           <p class="orb-launcher-hint">${escapeHTML(__("Press and hold a module to rearrange"))}</p>
