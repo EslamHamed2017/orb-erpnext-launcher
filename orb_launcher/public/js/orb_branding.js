@@ -67,7 +67,21 @@
     if (names[head]) document.title = [__(names[head]), ...rest].join(" | ");
   };
 
-  const run = () => { fixTitle(); fixFavicon(); fixNodes(document.body); fixModuleHeading(); };
+  const fixDockLabels = () => {
+    const names = (window.frappe && frappe.boot && frappe.boot.orb_module_names) || {};
+    document.querySelectorAll("#desk-dock .dock-items .dock-item").forEach((item) => {
+      const current = item.dataset.orbModule || item.getAttribute("aria-label") || item.querySelector(".dock-item-label")?.textContent?.trim();
+      if (!current || !names[current]) return;
+      item.dataset.orbModule = current;
+      const label = __(names[current]);
+      item.setAttribute("aria-label", label);
+      if (item.hasAttribute("title")) item.setAttribute("title", label);
+      const text = item.querySelector(".dock-item-label");
+      if (text) text.textContent = label;
+    });
+  };
+
+  const run = () => { fixTitle(); fixFavicon(); fixNodes(document.body); fixModuleHeading(); fixDockLabels(); };
   const schedule = () => { clearTimeout(timer); timer = setTimeout(run, 40); };
 
   const boot = () => {
