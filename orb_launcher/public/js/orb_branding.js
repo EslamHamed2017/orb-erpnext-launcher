@@ -81,7 +81,23 @@
     });
   };
 
-  const run = () => { fixTitle(); fixFavicon(); fixNodes(document.body); fixModuleHeading(); fixDockLabels(); };
+  const fixWorkspaceSearchLabels = () => {
+    const names = (window.frappe && frappe.boot && frappe.boot.orb_module_names) || {};
+    document.querySelectorAll('[role="dialog"] a[href*="/desk/Workspaces/"]').forEach((link) => {
+      const strong = link.querySelector("b");
+      const internal = strong?.textContent?.trim();
+      if (internal && names[internal]) strong.textContent = __(names[internal]);
+    });
+  };
+
+  const run = () => {
+    fixTitle();
+    fixFavicon();
+    fixNodes(document.body);
+    fixModuleHeading();
+    fixDockLabels();
+    fixWorkspaceSearchLabels();
+  };
   const schedule = () => { clearTimeout(timer); timer = setTimeout(run, 40); };
 
   const boot = () => {
