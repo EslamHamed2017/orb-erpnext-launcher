@@ -60,12 +60,13 @@ def boot_session(bootinfo):
 
 
 def apply_site_branding():
-	"""Name used on the login page, emails and page titles (System Settings → App Name).
+	"""Set the display name used on the login page, emails and page titles.
 
-	Only set when it is still a default value, so a name an admin chose is kept.
+	This changes only System Settings → App Name. The internal ``erpnext`` app name,
+	routes and data remain untouched.
 	"""
 	current = frappe.db.get_single_value("System Settings", "app_name") or ""
-	if current.strip() in OLD_NAMES or current.strip() == "Frappe":
+	if current.strip() != BRAND_NAME:
 		frappe.db.set_single_value("System Settings", "app_name", BRAND_NAME)
 		frappe.clear_cache()
 
