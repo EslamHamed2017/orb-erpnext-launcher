@@ -1,0 +1,275 @@
+/* ORB login page: glass card over green coffee beans.
+   Scoped to the login route only. Selectors start with `html body[data-path="login"]` so they
+   win over the site's Website Theme, which styles the same elements with `body:has(.for-login)`. */
+
+html body[data-path="login"] {
+	--orb-gold: #c9a35a;
+	--orb-gold-2: #e3c482;
+	--orb-ink: #14202e;
+	min-height: 100vh;
+	margin: 0;
+	color: #fff;
+	height: auto !important;
+	background: transparent !important;
+	font-family: "IBM Plex Sans", "IBM Plex Sans Arabic", Inter, system-ui, sans-serif;
+}
+html:has(body[data-path="login"]) {
+	height: auto !important;
+	min-height: 100%;
+	background: #2e3a24 url("/assets/orb_launcher/images/orb-login-beans.svg") center / cover no-repeat fixed;
+}
+html[dir="rtl"] body[data-path="login"] {
+	font-family: "IBM Plex Sans Arabic", "IBM Plex Sans", Tahoma, system-ui, sans-serif;
+}
+html body[data-path="login"]::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	background: linear-gradient(90deg, rgba(13, 26, 16, .92) 0%, rgba(13, 26, 16, .65) 45%, rgba(13, 26, 16, .25) 100%);
+}
+html[dir="rtl"] body[data-path="login"]::before {
+	background: linear-gradient(270deg, rgba(13, 26, 16, .92) 0%, rgba(13, 26, 16, .65) 45%, rgba(13, 26, 16, .25) 100%);
+}
+
+/* Layout: top bar, intro + card, footer */
+html body[data-path="login"] #page-login,
+html body[data-path="login"] .page-content-wrapper {
+	position: relative;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background: none !important;
+	overflow: visible;
+}
+html body[data-path="login"] .page-breadcrumbs,
+html body[data-path="login"] .page-header-wrapper,
+html body[data-path="login"] .web-footer {
+	display: none !important;
+}
+html body[data-path="login"] main.container {
+	flex: 1;
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	padding: 28px clamp(24px, 8vw, 110px);
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 430px;
+	align-items: center;
+	gap: 64px;
+}
+html body[data-path="login"] .page_content,
+html body[data-path="login"] .page_content > div {
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	padding: 0;
+}
+html body[data-path="login"] .page-footer { display: none; }
+
+html body[data-path="login"] .orb-login-top {
+	position: relative;
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	padding: 26px clamp(24px, 8vw, 110px) 0;
+	font-size: 13px;
+	color: rgba(255, 255, 255, .72);
+}
+html body[data-path="login"] .orb-login-top a { color: rgba(255, 255, 255, .72); text-decoration: none; }
+html body[data-path="login"] .orb-login-top a:hover { color: #fff; }
+html body[data-path="login"] .orb-login-top .is-active { color: #fff; font-weight: 600; }
+
+html body[data-path="login"] .orb-login-intro h2 {
+	margin: 0;
+	max-width: 14em;
+	font-size: clamp(30px, 3.6vw, 48px);
+	line-height: 1.12;
+	font-weight: 600;
+	letter-spacing: -.02em;
+	color: #fff;
+	text-wrap: balance;
+}
+html[dir="rtl"] body[data-path="login"] .orb-login-intro h2 { max-width: 11em; letter-spacing: 0; line-height: 1.35; }
+html body[data-path="login"] .orb-login-intro p {
+	margin: 16px 0 0;
+	max-width: 42ch;
+	font-size: 16px;
+	line-height: 1.65;
+	color: rgba(255, 255, 255, .76);
+}
+
+html body[data-path="login"] .orb-login-foot {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 0 clamp(24px, 8vw, 110px) 22px;
+	font-size: 12.5px;
+	color: rgba(255, 255, 255, .72);
+}
+
+/* Reset the old presentation theme on every login section */
+html body[data-path="login"] .for-login,
+html body[data-path="login"] .for-signup,
+html body[data-path="login"] .for-forgot,
+html body[data-path="login"] .for-login-with-email-link {
+	width: 100%;
+	max-width: none;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	justify-content: stretch;
+}
+html body[data-path="login"] .for-login:not([style*="none"]),
+html body[data-path="login"] .for-forgot:not([style*="none"]),
+html body[data-path="login"] .for-login-with-email-link:not([style*="none"]) {
+	display: block;
+}
+html body[data-path="login"] .for-login::before,
+html body[data-path="login"] .for-login::after {
+	content: none !important;
+	display: none !important;
+}
+
+/* Glass card */
+html body[data-path="login"] .login-content.page-card {
+	width: 100%;
+	max-width: 430px;
+	margin: 0;
+	padding: 40px 42px;
+	gap: 22px;
+	color: #fff;
+	border: 1px solid rgba(255, 255, 255, .22);
+	border-radius: 24px;
+	background: linear-gradient(135deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .05));
+	-webkit-backdrop-filter: blur(24px) saturate(150%);
+	backdrop-filter: blur(24px) saturate(150%);
+	box-shadow: 0 30px 80px rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .27);
+	transform: none !important;
+	transition: none !important;
+}
+html body[data-path="login"] .page-card-head,
+html body[data-path="login"] .page-card-head * { text-align: start !important; }
+html body[data-path="login"] .page-card-head { gap: 18px; align-items: flex-start; }
+html body[data-path="login"] .login-content p.text-right { text-align: end !important; }
+html body[data-path="login"] .app-logo {
+	width: auto;
+	max-width: none;
+	height: 46px;
+	max-height: none;
+	margin: 0 0 6px;
+	object-fit: contain;
+}
+html body[data-path="login"] .page-card-head h4 {
+	color: #fff !important;
+	font-size: 26px;
+	font-weight: 600;
+	letter-spacing: -.01em;
+}
+html body[data-path="login"] .page-card-subtitle { color: rgba(255, 255, 255, .76) !important; font-size: 14px; }
+html body[data-path="login"] .login-content label {
+	color: rgba(255, 255, 255, .88) !important;
+	font-size: 13px;
+	font-weight: 500;
+}
+html body[data-path="login"] .login-content .email-field,
+html body[data-path="login"] .login-content .password-field { width: 100%; }
+html body[data-path="login"] .login-content .form-control {
+	height: 44px;
+	border-radius: 10px;
+	color: #fff !important;
+	background: rgba(255, 255, 255, .09) !important;
+	border: 1px solid rgba(255, 255, 255, .21) !important;
+	box-shadow: none !important;
+}
+html body[data-path="login"] .login-content .form-control::placeholder { color: rgba(255, 255, 255, .55); opacity: 1; }
+html body[data-path="login"] .login-content .form-control:focus {
+	color: #fff !important;
+	background: rgba(255, 255, 255, .13) !important;
+	border-color: var(--orb-gold-2) !important;
+	box-shadow: 0 0 0 3px rgba(227, 191, 115, .25) !important;
+	outline: none;
+}
+html body[data-path="login"] .login-content .form-control:-webkit-autofill {
+	-webkit-text-fill-color: #fff;
+	-webkit-box-shadow: 0 0 0 40px rgba(46, 70, 40, .96) inset;
+	caret-color: #fff;
+}
+html body[data-path="login"] .login-content .password-field svg,
+html body[data-path="login"] .login-content .toggle-password { color: rgba(255, 255, 255, .7); stroke: currentColor; }
+html body[data-path="login"] .login-content a[href="#forgot"],
+html body[data-path="login"] .login-content .btn-resend-link,
+html body[data-path="login"] .login-content a[href="#login"]:not(.es-button) {
+	color: #f0cf8a !important;
+	font-weight: 500;
+}
+html body[data-path="login"] .login-content .field-error { color: #ffb4a8 !important; }
+
+html body[data-path="login"] .login-content button.es-button[data-variant="solid"] {
+	min-height: 46px;
+	border: 0 !important;
+	border-radius: 10px;
+	background: linear-gradient(90deg, var(--orb-gold), var(--orb-gold-2)) !important;
+	color: var(--orb-ink) !important;
+	font-weight: 600;
+	font-size: 15px;
+	box-shadow: none;
+	transform: none !important;
+}
+html body[data-path="login"] .login-content button.es-button[data-variant="solid"]:hover { filter: brightness(1.06); }
+html body[data-path="login"] .login-content button.es-button[data-variant="solid"]:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+html body[data-path="login"] .login-content a.es-button {
+	min-height: 44px;
+	border-radius: 10px;
+	color: #fff !important;
+	background: rgba(255, 255, 255, .07) !important;
+	border: 1px solid rgba(255, 255, 255, .26) !important;
+	font-weight: 500;
+}
+html body[data-path="login"] .login-content a.es-button:hover { background: rgba(255, 255, 255, .13) !important; }
+html body[data-path="login"] .orb-login-or {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 12.5px;
+	color: rgba(255, 255, 255, .65);
+}
+html body[data-path="login"] .orb-login-or::before,
+html body[data-path="login"] .orb-login-or::after { content: ""; flex: 1; height: 1px; background: rgba(255, 255, 255, .22); }
+html body[data-path="login"] .login-content .es-alert { border-radius: 10px; }
+html body[data-path="login"] .login-content .sign-up-message,
+html body[data-path="login"] .login-content .resend-link { color: rgba(255, 255, 255, .76) !important; }
+
+/* Short laptop screens */
+@media (max-height: 700px) and (min-width: 861px) {
+	html body[data-path="login"] .login-content.page-card { padding: 26px 34px; gap: 16px; }
+	html body[data-path="login"] .app-logo { height: 38px; }
+}
+
+/* Phones and small tablets */
+@media (max-width: 860px) {
+	html:has(body[data-path="login"]) { background-attachment: scroll; }
+	html body[data-path="login"]::before { background: linear-gradient(180deg, rgba(13, 26, 16, .8), rgba(13, 26, 16, .7)); }
+	html body[data-path="login"] main.container {
+		grid-template-columns: 1fr;
+		align-content: start;
+		gap: 22px;
+		padding: 22px 20px 28px;
+	}
+	html body[data-path="login"] .orb-login-top { padding: 20px 20px 0; }
+	html body[data-path="login"] .orb-login-intro h2 { font-size: 26px; }
+	html body[data-path="login"] .orb-login-intro p { display: none; }
+	html body[data-path="login"] .login-content.page-card { max-width: none; padding: 28px 22px; }
+	html body[data-path="login"] .orb-login-foot {
+		flex-direction: column;
+		align-items: center;
+		gap: 4px;
+		padding: 0 20px 22px;
+		text-align: center;
+	}
+}
+
+@media (prefers-reduced-transparency: reduce) {
+	html body[data-path="login"] .login-content.page-card { background: rgba(28, 44, 30, .96); }
+}
